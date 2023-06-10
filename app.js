@@ -1,6 +1,7 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 const PORT = 8989
 const DB_URL = "mongodb+srv://root:b3lJHkLHeqpc7RSs@cluster0.ewctvwt.mongodb.net/forex?retryWrites=true&w=majority"
@@ -13,6 +14,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(cors());
 app.use(authMiddleware);
 app.use('/api', indexRouter);
 
