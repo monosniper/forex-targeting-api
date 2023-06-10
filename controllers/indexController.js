@@ -1,5 +1,6 @@
 const BalanceModel = require("../models/balance-model");
 const TargetModel = require("../models/target-model");
+const getRandomChineseWord = require("../utils/getRandomChineseWord");
 
 class indexController {
     async addBalance(req, res, next) {
@@ -39,7 +40,7 @@ class indexController {
 
             const target = await TargetModel.create({title, type, amount})
 
-            return res.json({success: true, data: target});
+            setTimeout(() => {return res.json({success: true, data: target})}, 5000)
         } catch (e) {
             console.log(e)
             next(e);
@@ -86,7 +87,7 @@ class indexController {
     async getTarget(req, res, next) {
         try {
             const data = await TargetModel.findOne({_id: req.params.id})
-            
+
             if(!data.isModerated) {
                 if(new Date().getTime() - new Date(data.createdAt).getTime() > 1000 * 60 * 60) {
                     data.isModerated = true
@@ -107,6 +108,27 @@ class indexController {
             const success = await TargetModel.deleteOne({_id: req.params.id})
 
             return res.json({success});
+        } catch (e) {
+            console.log(e)
+            next(e);
+        }
+    }
+
+    async preTarget(req, res, next) {
+        try {
+            const data = {
+                companyName: "",
+                goal: "",
+                url: ""
+            }
+
+            Object.entries(req.body).map(([key, value]) => {
+                for(let i = 0; i < value.length; i++) {
+                    data[key] += getRandomChineseWord()
+                }
+            })
+
+            setTimeout(() => {return res.json({success: true, data})}, 2000)
         } catch (e) {
             console.log(e)
             next(e);

@@ -18,16 +18,12 @@ app.use(cors());
 app.use(authMiddleware);
 app.use('/api', indexRouter);
 
-const BalanceModel = require('./models/balance-model')
-
 const start = async () => {
     try {
         await mongoose.connect(DB_URL, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         });
-
-        // await BalanceModel.create({value: 0})
 
         await app.listen(PORT, () => {
             console.log('Server started at port ' + PORT);
