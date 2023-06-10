@@ -1,6 +1,7 @@
 const {Schema, model} = require('mongoose');
 
 const TargetSchema = new Schema({
+    title: {type: String},
     type: {
         type: String,
         enum : [

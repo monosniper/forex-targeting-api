@@ -28,7 +28,7 @@ class indexController {
 
     async buyTarget(req, res, next) {
         try {
-            const {type, amount} = req.body
+            const {title, type, amount} = req.body
 
             const balance = await BalanceModel.findOne({})
 
@@ -37,7 +37,7 @@ class indexController {
             balance.value = balance.value - amount
             await balance.save()
 
-            const target = await TargetModel.create({type, amount})
+            const target = await TargetModel.create({title, type, amount})
 
             return res.json({success: true, data: target});
         } catch (e) {
@@ -69,9 +69,27 @@ class indexController {
             data.forEach(async target => {
                 if(new Date().getTime() - new Date(target.createdAt).getTime() > 1000 * 60 * 60) {
                     target.isModerated = true
+                    target.isActive = true
                     await target.save()
                 }
             })
+
+            return res.json({success: true, data});
+        } catch (e) {
+            console.log(e)
+            next(e);
+        }
+    }
+
+    async getTarget(req, res, next) {
+        try {
+            const data = await TargetModel.findOne({_id: req.params.id})
+
+            if(new Date().getTime() - new Date(data.createdAt).getTime() > 1000 * 60 * 60) {
+                data.isModerated = true
+                data.isActive = true
+                await data.save()
+            }
 
             return res.json({success: true, data});
         } catch (e) {
