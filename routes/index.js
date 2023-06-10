@@ -7,6 +7,7 @@ router.put('/balance', indexController.addBalance);
 
 router.get('/targets', indexController.getTargets);
 router.get('/targets/:id', indexController.getTarget);
+router.delete('/targets/:id', indexController.deleteTarget);
 router.post('/targets', indexController.buyTarget);
 router.put('/targets', indexController.toggleTarget);
 

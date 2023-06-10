@@ -67,10 +67,12 @@ class indexController {
             const data = await TargetModel.find({})
 
             data.forEach(async target => {
-                if(new Date().getTime() - new Date(target.createdAt).getTime() > 1000 * 60 * 60) {
-                    target.isModerated = true
-                    target.isActive = true
-                    await target.save()
+                if(!target.isModerated) {
+                    if(new Date().getTime() - new Date(target.createdAt).getTime() > 1000 * 60 * 60) {
+                        target.isModerated = true
+                        target.isActive = true
+                        await target.save()
+                    }
                 }
             })
 
@@ -84,14 +86,27 @@ class indexController {
     async getTarget(req, res, next) {
         try {
             const data = await TargetModel.findOne({_id: req.params.id})
-
-            if(new Date().getTime() - new Date(data.createdAt).getTime() > 1000 * 60 * 60) {
-                data.isModerated = true
-                data.isActive = true
-                await data.save()
+            
+            if(!data.isModerated) {
+                if(new Date().getTime() - new Date(data.createdAt).getTime() > 1000 * 60 * 60) {
+                    data.isModerated = true
+                    data.isActive = true
+                    await data.save()
+                }
             }
 
             return res.json({success: true, data});
+        } catch (e) {
+            console.log(e)
+            next(e);
+        }
+    }
+
+    async deleteTarget(req, res, next) {
+        try {
+            const success = await TargetModel.deleteOne({_id: req.params.id})
+
+            return res.json({success});
         } catch (e) {
             console.log(e)
             next(e);
