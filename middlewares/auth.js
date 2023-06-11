@@ -6,7 +6,7 @@ async function authMiddleware(req, res, next) {
     const token = req.headers.authorization
     const match = token?.split(' ')[1] === API_TOKEN
 
-    const _id = req.headers.userId
+    const _id = req.headers.userid
 
     if(_id) {
         req.user = await UserModel.findOne({_id})

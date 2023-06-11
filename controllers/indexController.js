@@ -8,7 +8,7 @@ class indexController {
             const {id: _id} = req.body
 
             if(!_id) return res.json({success: false, error: 'Bad request'});
-            
+
             const user = await UserModel.findOne({_id})
 
             return res.json({success: true, data: user});
