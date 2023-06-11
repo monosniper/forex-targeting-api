@@ -31,6 +31,8 @@ class indexController {
         try {
             const {title, type, amount} = req.body
 
+            if(!title || !type || !amount) return res.json({success: false, error: 'Bad request'});
+
             const balance = await BalanceModel.findOne({})
 
             if(balance.value <= amount) return res.json({success: false, error: 'Not enough money'});
@@ -88,6 +90,7 @@ class indexController {
         try {
             const data = await TargetModel.findOne({_id: req.params.id})
 
+            if(!data) return res.json({success: false, error: 'Can not find target'});
             if(!data.isModerated) {
                 if(new Date().getTime() - new Date(data.createdAt).getTime() > 1000 * 60 * 60) {
                     data.isModerated = true
@@ -118,7 +121,15 @@ class indexController {
         try {
             const data = {
                 companyName: "",
-                goal: "",
+                subtitle: "",
+                description: "",
+                tags: "",
+                metatags: "",
+                audience: "",
+                targeting: "",
+                countries: "",
+                phone: "",
+                email: "",
                 url: ""
             }
 
