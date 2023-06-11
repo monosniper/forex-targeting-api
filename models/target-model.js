@@ -11,6 +11,7 @@ const TargetSchema = new Schema({
         ],
     },
     amount: {type: Number},
+    startTime: {type: Date},
     isActive: {type: Boolean, default: false},
     isModerated: {type: Boolean, default: false},
 }, {timestamps: true});

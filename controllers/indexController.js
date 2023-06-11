@@ -1,13 +1,25 @@
-const BalanceModel = require("../models/balance-model");
+const UserModel = require("../models/user-model");
 const TargetModel = require("../models/target-model");
 const getRandomChineseWord = require("../utils/getRandomChineseWord");
 
 class indexController {
+    async login(req, res, next) {
+        try {
+            const user = await UserModel.findOne({_id: req.body.id})
+
+            if(!user) return res.json({success: false, error: 'Incorrect ID'});
+
+            return res.json({success: true, data: user});
+        } catch (e) {
+            console.log(e)
+            next(e);
+        }
+    }
+
     async addBalance(req, res, next) {
         try {
-            const balance = await BalanceModel.findOne({})
-            balance.value = balance.value + parseInt(req.body.amount)
-            await balance.save()
+            req.user.balance = req.user.balance + parseInt(req.body.amount)
+            await req.user.save()
 
             return res.json({success: true});
         } catch (e) {
@@ -17,8 +29,7 @@ class indexController {
     }
     async balance(req, res, next) {
         try {
-            const balance = await BalanceModel.findOne({})
-            const data = balance.value
+            const data = req.user.balance
 
             return res.json({success: true, data});
         } catch (e) {
@@ -29,18 +40,16 @@ class indexController {
 
     async buyTarget(req, res, next) {
         try {
-            const {title, type, amount} = req.body
+            const {title, type, amount, startTime} = req.body
 
-            if(!title || !type || !amount) return res.json({success: false, error: 'Bad request'});
+            if(!title || !type || !amount || !startTime) return res.json({success: false, error: 'Bad request'});
 
-            const balance = await BalanceModel.findOne({})
+            if(req.user.balance <= amount) return res.json({success: false, error: 'Not enough money'});
 
-            if(balance.value <= amount) return res.json({success: false, error: 'Not enough money'});
+            req.user.balance = req.user.balance - amount
+            await req.user.save()
 
-            balance.value = balance.value - amount
-            await balance.save()
-
-            const target = await TargetModel.create({title, type, amount})
+            const target = await TargetModel.create({title, type, amount, startTime})
 
             setTimeout(() => {return res.json({success: true, data: target})}, 5000)
         } catch (e) {
@@ -73,6 +82,10 @@ class indexController {
                 if(!target.isModerated) {
                     if(new Date().getTime() - new Date(target.createdAt).getTime() > 1000 * 60 * 60) {
                         target.isModerated = true
+                        await target.save()
+                    }
+                } else {
+                    if(new Date().getTime() - new Date(target.startTime).getTime() > 1000 * 60 * 60) {
                         target.isActive = true
                         await target.save()
                     }
@@ -94,8 +107,12 @@ class indexController {
             if(!data.isModerated) {
                 if(new Date().getTime() - new Date(data.createdAt).getTime() > 1000 * 60 * 60) {
                     data.isModerated = true
-                    data.isActive = true
                     await data.save()
+                } else {
+                    if(new Date().getTime() - new Date(data.startTime).getTime() > 1000 * 60 * 60) {
+                        data.isActive = true
+                        await data.save()
+                    }
                 }
             }
 
