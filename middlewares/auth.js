@@ -10,6 +10,7 @@ async function authMiddleware(req, res, next) {
 
     if(_id) {
         req.user = await UserModel.findOne({_id})
+        console.log(req.user)
     }
 
     if(!token || !match) {

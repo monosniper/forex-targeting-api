@@ -52,7 +52,7 @@ class indexController {
             req.user.balance = req.user.balance - amount
             await req.user.save()
 
-            const target = await TargetModel.create({title, type, amount, startTime})
+            const target = await TargetModel.create({title, type, amount, startTime, userId: req.user._id})
 
             setTimeout(() => {return res.json({success: true, data: target})}, 5000)
         } catch (e) {
@@ -79,7 +79,7 @@ class indexController {
 
     async getTargets(req, res, next) {
         try {
-            const data = await TargetModel.find({})
+            const data = await TargetModel.find({userId: req.user._id})
 
             data.forEach(async target => {
                 if(!target.isModerated) {
