@@ -2,7 +2,6 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const UserModel = require("./models/user-model");
 const PORT = 8989
 const DB_URL = "mongodb+srv://root:b3lJHkLHeqpc7RSs@cluster0.ewctvwt.mongodb.net/forex?retryWrites=true&w=majority"
 
@@ -24,8 +23,6 @@ const start = async () => {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         });
-
-        await UserModel.create({balance: 0})
 
         await app.listen(PORT, () => {
             console.log('Server started at port ' + PORT);
