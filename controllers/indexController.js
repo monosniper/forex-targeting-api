@@ -134,7 +134,7 @@ class indexController {
             }
 
             Object.entries(req.body).map(([key, value]) => {
-                for(let i = 0; i < value.length; i++) {
+                for(let i = 0; i < value.toString().length; i++) {
                     data[key] += getRandomChineseWord()
                 }
             })
