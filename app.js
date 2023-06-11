@@ -7,6 +7,7 @@ const DB_URL = "mongodb+srv://root:b3lJHkLHeqpc7RSs@cluster0.ewctvwt.mongodb.net
 
 const indexRouter = require('./routes/index');
 const authMiddleware = require("./middlewares/auth");
+const {initScheduledJobs} = require("./schedule");
 
 const app = express();
 
@@ -23,6 +24,8 @@ const start = async () => {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         });
+
+        initScheduledJobs();
 
         await app.listen(PORT, () => {
             console.log('Server started at port ' + PORT);

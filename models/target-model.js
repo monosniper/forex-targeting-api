@@ -15,6 +15,11 @@ const TargetSchema = new Schema({
     startTime: {type: Date},
     isActive: {type: Boolean, default: false},
     isModerated: {type: Boolean, default: false},
+
+    clicks: {type: Number, default: 0},
+    visits: {type: Number, default: 0},
+    online: {type: Number, default: 0},
+    middleTime: {type: Number, default: 0},
 }, {timestamps: true});
 
 module.exports = model('Target', TargetSchema);
