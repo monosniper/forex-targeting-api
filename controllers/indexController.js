@@ -5,14 +5,17 @@ const getRandomChineseWord = require("../utils/getRandomChineseWord");
 class indexController {
     async login(req, res, next) {
         try {
-            const user = await UserModel.findOne({_id: req.body.id})
+            const {id: _id} = req.body
 
-            if(!user) return res.json({success: false, error: 'Incorrect ID'});
+            if(!_id) return res.json({success: false, error: 'Bad request'});
+            
+            const user = await UserModel.findOne({_id})
 
             return res.json({success: true, data: user});
         } catch (e) {
             console.log(e)
-            next(e);
+            return res.json({success: false, error: 'Incorrect ID'});
+            // next(e);
         }
     }
 
