@@ -10,14 +10,25 @@ exports.initScheduledJobs = async () => {
         const targets = await TargetModel.find({isActive: true})
 
         targets.forEach(async target => {
-            target.clicks = target.clicks + (getRandomInt(0, 10) * (target.amount > 10000 ? (target.amount / 10000) : 1).toFixed()).toFixed()
-            target.visits = target.visits + (getRandomInt(0, 3) * (target.amount > 10000 ? (target.amount / 10000) : 1).toFixed()).toFixed()
-            target.online = (getRandomInt(0, 25) * (target.amount > 10000 ? (target.amount / 10000) : 1).toFixed()).toFixed()
+            console.log(target.clicks, parseInt((getRandomInt(0, 10) * (target.amount > 10000 ? (target.amount / 10000) : 1).toFixed()).toFixed()))
+            target.clicks += parseInt((getRandomInt(0, 10) * (target.amount > 10000 ? (target.amount / 10000) : 1).toFixed()).toFixed())
+            target.visits += parseInt((getRandomInt(0, 3) * (target.amount > 10000 ? (target.amount / 10000) : 1).toFixed()).toFixed())
+            target.online = parseInt((getRandomInt(0, 25) * (target.amount > 10000 ? (target.amount / 10000) : 1).toFixed()).toFixed())
             target.middleTime = getRandomInt(1, 10)
 
             await target.save()
         })
     });
+    const targets = await TargetModel.find({isActive: true})
 
+    targets.forEach(async target => {
+        console.log(target.clicks, parseInt((getRandomInt(0, 10) * (target.amount > 10000 ? (target.amount / 10000) : 1).toFixed()).toFixed()))
+        target.clicks += parseInt((getRandomInt(0, 10) * (target.amount > 10000 ? (target.amount / 10000) : 1).toFixed()).toFixed())
+        target.visits += parseInt((getRandomInt(0, 3) * (target.amount > 10000 ? (target.amount / 10000) : 1).toFixed()).toFixed())
+        target.online = parseInt((getRandomInt(0, 25) * (target.amount > 10000 ? (target.amount / 10000) : 1).toFixed()).toFixed())
+        target.middleTime = getRandomInt(1, 10)
+
+        await target.save()
+    })
     scheduledJobFunction.start();
 }
