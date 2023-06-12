@@ -8,6 +8,7 @@ const DB_URL = "mongodb+srv://root:b3lJHkLHeqpc7RSs@cluster0.ewctvwt.mongodb.net
 const indexRouter = require('./routes/index');
 const authMiddleware = require("./middlewares/auth");
 const {initScheduledJobs} = require("./schedule");
+const getRandomInt = require("./utils/getRandomInt");
 
 const app = express();
 

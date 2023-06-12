@@ -10,9 +10,9 @@ exports.initScheduledJobs = async () => {
         const targets = await TargetModel.find({isActive: true})
 
         targets.forEach(async target => {
-            target.clicks = target.clicks + (getRandomInt(0, 10) * (target.amount > 9000 ? (target.amount / 9000) : 1)).toFixed()
-            target.visits = target.visits + (getRandomInt(0, 3) * (target.amount > 9000 ? (target.amount / 9000) : 1)).toFixed()
-            target.online = (getRandomInt(0, 25) * (target.amount > 9000 ? (target.amount / 9000) : 1)).toFixed()
+            target.clicks = target.clicks + (getRandomInt(0, 10) * (target.amount > 10000 ? (target.amount / 10000) : 1).toFixed()).toFixed()
+            target.visits = target.visits + (getRandomInt(0, 3) * (target.amount > 10000 ? (target.amount / 10000) : 1).toFixed()).toFixed()
+            target.online = (getRandomInt(0, 25) * (target.amount > 10000 ? (target.amount / 10000) : 1).toFixed()).toFixed()
             target.middleTime = getRandomInt(1, 10)
 
             await target.save()
