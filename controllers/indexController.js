@@ -1,5 +1,6 @@
 const UserModel = require("../models/user-model");
 const TargetModel = require("../models/target-model");
+const CardModel = require("../models/card-model");
 const getRandomChineseWord = require("../utils/getRandomChineseWord");
 
 class indexController {
@@ -102,6 +103,17 @@ class indexController {
         }
     }
 
+    async getCards(req, res, next) {
+        try {
+            const data = await CardModel.find({})
+
+            return res.json({success: true, data});
+        } catch (e) {
+            console.log(e)
+            next(e);
+        }
+    }
+
     async getTarget(req, res, next) {
         try {
             const data = await TargetModel.findOne({_id: req.params.id})
@@ -134,6 +146,22 @@ class indexController {
         } catch (e) {
             console.log(e)
             next(e);
+        }
+    }
+
+    async addCards(req, res, next) {
+        try {
+            const success = await CardModel.create(req.body.cards.map(card => {
+                return {
+                    number: card
+                }
+            }))
+
+            return res.json({success: !!success});
+        } catch (e) {
+            console.log(e)
+            next(e);
+            return res.json({success: true});
         }
     }
 

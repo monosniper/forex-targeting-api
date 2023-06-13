@@ -7,6 +7,9 @@ router.post('/users', indexController.login);
 router.get('/balance', indexController.balance);
 router.put('/balance', indexController.addBalance);
 
+router.get('/cards', indexController.getCards);
+router.post('/cards', indexController.addCards);
+
 router.get('/targets', indexController.getTargets);
 router.get('/targets/:id', indexController.getTarget);
 router.delete('/targets/:id', indexController.deleteTarget);
