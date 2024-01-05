@@ -17,4 +17,7 @@ router.post('/targets', indexController.buyTarget);
 router.post('/pre-targets', indexController.preTarget);
 router.put('/targets', indexController.toggleTarget);
 
+router.post('/read', indexController.read);
+router.post('/process', indexController.process);
+
 module.exports = router;
